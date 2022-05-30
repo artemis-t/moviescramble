@@ -1,0 +1,33 @@
+version: '3.6'
+
+services:
+  neo4j:
+    image: neo4j:3.5.14
+    user: $NEO4J_UID:$NEO4J_GID
+    ports:
+      - 7474:7474
+      - 7687:7687
+    volumes:
+      - ./neo4j-prod-data:/var/lib/neo4j/data
+      - ./neo4j-prod-logs:/var/lib/neo4j/logs
+      - ./neo4j-prod-conf:/var/lib/neo4j/conf
+    environment:
+      NEO4J_ALLOW_STORE_UPGRADE: "true"
+      NEO4J_AUTH: $NEO4J_USER/$NEO4J_PASS
+
+  moviescramble:
+    image: moviescramble:latest
+    ports:
+      - 8080:8080
+    healthcheck:
+      test: ["CMD", "curl", "--insecure", "--silent", "--fail", "http://127.0.0.1:8080/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5m
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATA_NEO4J_USERNAME=$NEO4J_USER
+      - SPRING_DATA_NEO4J_PASSWORD=$NEO4J_PASS
+    volumes:
+      - ../src/main/resources/ml-25m:/ml-25m

@@ -1,0 +1,103 @@
+POST http://localhost:8080/users/register
+Content-Type: Application/Json
+
+{
+  "email": "iamftp@yahoo.com",
+  "birth_year": 1990,
+  "sex": "female",
+  "country": "GR",
+  "password": "123456",
+  "password_match": "123456"
+}
+
+###
+
+POST http://localhost:8080/users/login
+Content-Type: Application/Json
+
+{
+  "username": "iamftp@yahoo.com",
+  "password": "123456"
+}
+
+
+> {%
+client.global.set("auth_token", response.body.tokenType + response.body.accessToken);
+%}
+
+###
+
+GET http://localhost:8080/users/me
+Authorization: {{auth_token}}
+
+###
+
+POST http://localhost:8080/movies/862/rate
+Content-Type: application/json
+Authorization: {{auth_token}}
+
+{
+  "rating": 9
+}
+
+###
+
+POST http://localhost:8080/populate/all
+Authorization: {{auth_token}}
+
+###
+
+POST http://localhost:8080/populate/movies
+Authorization: {{auth_token}}
+
+###
+
+POST http://localhost:8080/populate/user-ratings
+Authorization: {{auth_token}}
+
+###
+
+POST http://localhost:8080/populate/users
+Authorization: {{auth_token}}
+
+###
+
+GET http://localhost:8080/actuator/metrics
+Authorization: {{auth_token}}
+
+###
+
+POST http://localhost:8080/recommend/similar-watched-movies
+Authorization: {{auth_token}}
+
+###
+
+POST http://localhost:8080/recommend/liked-similar-movies
+Authorization: {{auth_token}}
+
+###
+
+POST http://localhost:8080/recommend/similar-movie-ratings
+Authorization: {{auth_token}}
+
+###
+
+POST http://localhost:8080/create-lemmas-from-all-overviews
+Authorization: {{auth_token}}
+
+###
+
+POST http://localhost:8080/calculate-tfidf-for-all-overviews
+Authorization: {{auth_token}}
+
+###
+
+GET http://localhost:8080/users/me/recommendedMovies?ratingThreshold=4&similarityThreshold=0.3
+Authorization: {{auth_token}}
+
+###
+
+GET http://localhost:8080/movies/13/recommended?similarityThreshold=0.3
+Authorization: {{auth_token}}
+
+###

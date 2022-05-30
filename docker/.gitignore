@@ -1,0 +1,6 @@
+neo4j-data
+neo4j-logs
+neo4j-conf
+neo4j-prod-data
+neo4j-prod-logs
+neo4j-prod-conf
